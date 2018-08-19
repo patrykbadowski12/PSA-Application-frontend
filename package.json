@@ -1,0 +1,32 @@
+{
+  "name": "psafront",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ajv": "^6.5.2",
+    "babel-template": "^6.26.0",
+    "bootstrap": "^4.1.1",
+    "file-saver": "^1.3.8",
+    "jquery": "^3.3.1",
+    "popper": "^1.0.1",
+    "popper.js": "^1.14.3",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-modules": "^1.0.8",
+    "react-native": "^0.56.0",
+    "react-native-material-textfield": "^0.12.0",
+    "react-scripts": "1.1.4",
+    "react-text-field": "^0.4.0",
+    "react-textfield": "0.0.6",
+    "react-validation": "^3.0.7"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-router": "^4.3.1"
+  }
+}
