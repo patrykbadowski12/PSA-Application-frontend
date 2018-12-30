@@ -16,7 +16,6 @@ class Services extends React.Component {
             periodOnChange: ''
 
         };
-        this.Distance = this.Distance.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.isEmpty = this.isEmpty.bind(this);
@@ -25,7 +24,7 @@ class Services extends React.Component {
         this.deleteButton = this.deleteButton.bind(this);
 
         this.updateService = this.updateService.bind(this);
-        this.updateService2 = this.updateService2.bind(this);
+        this.updateToBack = this.updateToBack.bind(this);
         this.cancelUpdate = this.cancelUpdate.bind(this);
         this.pdfDownload = this.pdfDownload.bind(this);
 
@@ -101,6 +100,7 @@ class Services extends React.Component {
             method: 'DELETE'
         });
     }
+
     updateService(event) {
         event.preventDefault();
         this.setState({
@@ -109,12 +109,11 @@ class Services extends React.Component {
             serviceType: this.state.list[event.target.value].serviceType,
             description: this.state.list[event.target.value].description,
             when: this.state.list[event.target.value].when,
-            distance: this.state.list[event.target.value].distance,
-
+            distance: this.state.list[event.target.value].distance
         });
     }
 
-    updateService2(event) {
+    updateToBack(event) {
         event.preventDefault();
         var url = 'http://localhost:8080/api/services/' + this.state.list[this.state.updateId].id;
         var data = {
@@ -191,7 +190,7 @@ class Services extends React.Component {
                                 ref={(input) => this.distance = input} placeholder="distance" style={{ marginLeft: '20px' }}/>
                         </label>
                     </div>
-                    <button type="submit" className="btn btn-primary mb-2" onClick={this.updateService2}>Confirm Date</button>
+                    <button type="submit" className="btn btn-primary mb-2" onClick={this.updateToBack}>Confirm Date</button>
                     <button type="button" className="btn btn-primary mb-2" onClick={this.cancelUpdate} style={{ marginLeft: '20px' }}>Cancel</button>
                 </form>
             </div>
