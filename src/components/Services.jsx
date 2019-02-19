@@ -9,13 +9,14 @@ class Services extends React.Component {
     constructor() {
         super();
         this.state = {
-            list: [],
             period: this.date(),
             showUpdateForm: false,
             updateId: null,
-            periodOnChange: ''
+            periodOnChange: '',
+            list: [],
 
         };
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.isEmpty = this.isEmpty.bind(this);
@@ -34,15 +35,6 @@ class Services extends React.Component {
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
         this.onChangePeriod = this.onChangePeriod.bind(this);
 
-    }
-
-    Distance() {
-
-        let suma = 0;
-        for (let i = 0; i < this.state.list.length; i++) {
-            suma = suma + this.state.list[i].distance;
-        }
-        return suma;
     }
 
     date() {
@@ -73,32 +65,43 @@ class Services extends React.Component {
         }
     }
 
-    componentWillUpdate() {
-        this.whichData();
-    }
-
     componentDidMount() {
         this.getData();
     }
 
-
     getData() {
-        fetch('http://localhost:8080/api/services/search/' + this.state.period)
-            .then(results => results.json())
+        fetch('http://localhost:8080/api/services/search/' + this.state.period, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(results => results.json())
             .then(results => this.setState({ list: results }));
     }
 
     isEmpty() {
-        fetch('http://localhost:8080/api/services')
-            .then(results => results.json())
+        fetch('http://localhost:8080/api/services', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(results => results.json())
             .then(results => this.setState({ list: results }));
     }
 
     deleteButton(event) {
         event.preventDefault();
         fetch('http://localhost:8080/api/services/' + this.state.list[event.target.value].id, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
+
+        this.isEmpty();
     }
 
     updateService(event) {
@@ -128,12 +131,12 @@ class Services extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => this.setState({ showUpdateForm: false}));
+        }).then(response => this.setState({ showUpdateForm: false }));
     }
 
     pdfDownload(event) {
         event.preventDefault();
-        fetch('http://localhost:8080/api/services/generatePdf/' + this.state.periodOnChange , {
+        fetch('http://localhost:8080/api/services/generatePdf/' + this.state.periodOnChange, {
             headers: {
                 'Content-Type': 'application/pdf'
             },
@@ -165,6 +168,15 @@ class Services extends React.Component {
         this.setState({ distance: event.target.value });
     }
 
+    Distance() {
+
+        let suma = 0;
+        for (let i = 0; i < this.state.list.length; i++) {
+            suma = suma + this.state.list[i].distance;
+        }
+        return suma;
+    }
+
     updateForm() {
         return (
             <div className="">
@@ -175,19 +187,19 @@ class Services extends React.Component {
                         </label>
                         <label>
                             <input type="text" className="form-control" value={this.state.serviceType} onChange={this.handleChangeServiceType}
-                                ref={(input) => this.serviceType = input} placeholder="servicetype" style={{ marginLeft: '20px' }}/>
+                                ref={(input) => this.serviceType = input} placeholder="servicetype" style={{ marginLeft: '20px' }} />
                         </label>
                         <label>
                             <input type="text" className="form-control" value={this.state.description} onChange={this.handleChangeDescription}
-                                ref={(input) => this.description = input} placeholder="description" style={{ marginLeft: '20px' }}/>
+                                ref={(input) => this.description = input} placeholder="description" style={{ marginLeft: '20px' }} />
                         </label>
                         <label>
                             <input type="text" className="form-control" value={this.state.when} onChange={this.handleChangeWhen}
-                                ref={(input) => this.when = input} placeholder="When" style={{ marginLeft: '20px' }}/>
+                                ref={(input) => this.when = input} placeholder="When" style={{ marginLeft: '20px' }} />
                         </label>
                         <label>
                             <input type="text" className="form-control" value={this.state.distance} onChange={this.handleChangeDistance}
-                                ref={(input) => this.distance = input} placeholder="distance" style={{ marginLeft: '20px' }}/>
+                                ref={(input) => this.distance = input} placeholder="distance" style={{ marginLeft: '20px' }} />
                         </label>
                     </div>
                     <button type="submit" className="btn btn-primary mb-2" onClick={this.updateToBack}>Confirm Date</button>
@@ -211,13 +223,13 @@ class Services extends React.Component {
                         </div>
                         <button type="submit" className="btn btn-primary mb-2 ">{this.state.periodOnChange.length === 0 ? 'Show All' : 'Confirm Date'}</button>
                     </form>
-                    <button type="button" className="btn btn-danger mb-2" onClick={this.pdfDownload} style ={{marginLeft: '10px'}}>Generate PDF</button>
+                    <button type="button" className="btn btn-danger mb-2" onClick={this.pdfDownload} style={{ marginLeft: '10px' }}>Generate PDF</button>
                 </div>
                 <div>
-                    {this.Distance() !== 0 ? <span className="text-light" style={{ margin: '20px' }}> Distance :  {this.Distance()} </span> : null} 
+                    {this.Distance() !== 0 ? <span className="text-light" style={{ margin: '20px' }}> Distance :  {this.Distance()} </span> : null}
                 </div>
                 {this.state.showUpdateForm ? this.updateForm() : null}
-                {this.state.list.length !== 0 ? (
+                {this.state.list.length !== 0 ?
                     <div className="table-margin ">
                         <table className="table table-striped table-dark ">
                             <thead className="thead-dark">
@@ -236,7 +248,7 @@ class Services extends React.Component {
 
                                 {this.state.list.map((item, index) =>
                                     <tr key={index}>
-                                        <th scope='row'>{index}</th>
+                                        <th scope='row'>{index+1}</th>
                                         <th>{item.who}</th>
                                         <th>{item.serviceType}</th>
                                         <th>{item.description}</th>
@@ -248,17 +260,15 @@ class Services extends React.Component {
                                         <th>
                                             <button type="button" value={index} className="btn btn-danger mb-2" onClick={this.deleteButton}  >Delete</button>
                                         </th>
-                                    </tr>
-                                )}
-
+                                    </tr>)}
                             </tbody>
                         </table>
                     </div>
-                ) :
-                    <span className="text-light" style={{ margin: '20px' }}>It's nothing to show</span>}
+                    : <span className="text-light" style={{ margin: '20px' }}>It's nothing to show</span>}
             </div>
         );
     }
 
 }
 export default Services;
+
